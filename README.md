@@ -1,8 +1,9 @@
 # Skills: Research Paper Writing
 
-[中文介绍](./README_zh.md).
+**Language / 语言 / 言語 / اللغة:**
+[中文](./README_zh.md) | [Bahasa Indonesia](./README_id.md) | [日本語](./README_ja.md) | [العربية](./README_ar.md)
 
-> Important Attribution
+> **Important Attribution**
 > Most writing knowledge and methodology in this repository comes from Prof. Peng Sida (彭思达)'s open study notes:
 > https://pengsida.notion.site/c1a22465a0fa4b15a12985223916048e
 > Prof. Peng's original repository:
@@ -10,97 +11,127 @@
 > I sincerely thank Prof. Peng for openly sharing these valuable experiences.
 > My contribution is organization, structured adaptation, and packaging as reusable Skills.
 
-## Repository Overview
+---
 
-This repository currently provides one skill package:
+## What Is This?
 
-- `research-paper-writing/`
-  - `SKILL.md`: core workflow and usage rules
-  - `references/`: section-specific writing guides and templates
-  - `agents/openai.yaml`: agent metadata
+This repository gives your AI assistant **deep knowledge of academic paper writing** — based on the methodology of Prof. Peng Sida, a leading AI researcher.
 
-Typical use cases:
+After a one-time setup, just **ask your AI as you normally would**. The AI will automatically:
+- Guide you through writing Abstract / Introduction / Method / Experiments / Conclusion
+- Improve paragraph flow and section logic
+- Check claim-evidence alignment
+- Perform pre-submission self-review from a reviewer's perspective
 
-- Drafting or rewriting Abstract / Introduction / Method / Experiments / Conclusion
-- Improving paragraph flow and section logic
-- Checking claim-evidence alignment
-- Running pre-submission self-review from a reviewer mindset
+---
 
-## Installation
+## Quick Setup (3 Steps, Done Once)
 
-Assume you are in the repository root.
+### Step 1 — Clone this repository
 
-### 1) Codex
+**Windows:**
+```powershell
+git clone https://github.com/gibrandevlab/Research-Paper-Writing-Skills.git
+cd Research-Paper-Writing-Skills
+```
 
-Copy the skill into `$CODEX_HOME/skills/`:
+**Mac / Linux:**
+```bash
+git clone https://github.com/gibrandevlab/Research-Paper-Writing-Skills.git
+cd Research-Paper-Writing-Skills
+```
 
+> Don't have Git? Download at https://git-scm.com/downloads
+
+---
+
+### Step 2 — Install to your AI editor
+
+#### Gemini (Google)
+```powershell
+# Windows
+xcopy /E /I research-paper-writing "%USERPROFILE%\.gemini\skills\research-paper-writing"
+```
+```bash
+# Mac / Linux
+cp -R research-paper-writing ~/.gemini/skills/
+```
+
+#### Claude Code / Cline
+```powershell
+# Windows (global)
+xcopy /E /I research-paper-writing "%USERPROFILE%\.claude\skills\research-paper-writing"
+```
+```bash
+# Mac / Linux (global)
+cp -R research-paper-writing ~/.claude/skills/
+```
+
+#### Cursor
+Open Cursor → Settings → AI → add the `research-paper-writing` folder path to the Skills directory.
+
+#### Codex (OpenAI)
 ```bash
 mkdir -p "$CODEX_HOME/skills"
 cp -R research-paper-writing "$CODEX_HOME/skills/"
 ```
 
-Usage example:
+---
 
-```text
-Use $research-paper-writing to improve my paper's Introduction.
-```
+### Step 3 — Open your AI editor and start asking
 
-### 2) CC (Claude Code)
+**Done.** Nothing else to configure. Your AI will automatically know how to help.
 
-Use either a global or project-level installation.
+---
 
-Global:
+## Daily Usage
 
-```bash
-mkdir -p "$HOME/.claude/skills"
-cp -R research-paper-writing "$HOME/.claude/skills/"
-```
+Just open your AI editor and ask directly — no special commands, no need to remember any tool names.
 
-Project-level:
+**Writing an Abstract:**
+> "Help me write an abstract. My paper's main contribution is a new method for 3D object detection that is 2× faster than SOTA."
 
-```bash
-mkdir -p .claude/skills
-cp -R research-paper-writing .claude/skills/
-```
+**Improving Introduction:**
+> "My introduction doesn't flow well. Can you review and improve it?"
 
-In prompts, explicitly request this skill, for example: `Please use the research-paper-writing skill`.
+**Checking Method section:**
+> "Does my Method section clearly explain why module X is needed?"
 
-### 3) Gemini
+**Pre-submission review:**
+> "Please review my paper from the perspective of a CVPR reviewer."
 
-Copy this skill into your Gemini skills directory:
+The AI responds with structured, expert guidance — **you don't need to know any tool names, commands, or configurations**.
 
-```bash
-mkdir -p "$HOME/.gemini/skills"
-cp -R research-paper-writing "$HOME/.gemini/skills/"
-```
+---
 
-Then ask concrete tasks in Gemini (for example, rewriting an Abstract with claim-evidence checks).
+## Supported AI Editors
 
-## Project memory (.ai-context)
+| AI / Editor | Status |
+|---|---|
+| Claude Code | ✅ Fully automatic |
+| Gemini / Antigravity | ✅ Fully automatic |
+| Cursor | ✅ Automatic (rules always active) |
+| Cline | ✅ Fully automatic |
+| GitHub Copilot | ✅ Automatic (reads context on session start) |
+| OpenAI Codex | ✅ Full support |
+| Any other agent | ✅ Manual mode (ask AI to load context) |
 
-Conversation memory is shared across agents and lives in `.ai-context/`:
+---
 
-- `CONTEXT.md` - compact operational context (current focus, decisions, next steps)
-- `RESEARCH.md` - persistent research context (claims, method, evaluation standards, terminology);
-  never archived by `compact` or `reset`
-- `STATE.json` - machine-readable state (task, decisions, open questions, next steps)
-- `log/` - append-only session logs; `archive/` - compacted logs + digests + resets
+## Cross-Session Memory (.ai-context)
 
-```powershell
-# Windows PowerShell
-powershell -NoProfile -ExecutionPolicy Bypass -File tools/ai-context.ps1 status
-powershell -NoProfile -ExecutionPolicy Bypass -File tools/ai-context.ps1 resume
-powershell -NoProfile -ExecutionPolicy Bypass -File tools/ai-context.ps1 log `
-  -Agent cline -Did "what changed" -Next "what comes next"
-```
+This repository includes a shared memory system. This means:
+- Working on the same paper across different AI editors? **All AIs share the same context.**
+- AI won't "forget" what was discussed in a previous session.
+- Switch from Cursor to Claude Code? No problem — the context carries over.
 
-Rules for every agent are in [`AGENTS.md`](./AGENTS.md). Compaction triggers at
-~100,000 estimated tokens (`compact`), after which the agent rewrites `CONTEXT.md`
-and runs `compact-done`. `reset -Yes` archives all operational memory and starts from
-zero while keeping `.ai-context/RESEARCH.md`. `CLAUDE.md`, `GEMINI.md`,
-`.clinerules/context-memory.md` and `.github/copilot-instructions.md` make the same
-rules discoverable by each agent runtime.
+This all happens **automatically in the background** — you don't need to do anything.
 
+> **For developers / technical users:** see [AGENTS.md](./AGENTS.md) for the full context-memory protocol and `tools/ai-context.ps1` command reference.
+
+---
+
+## Credits
 
 Again, this repository is primarily based on Prof. Peng Sida (彭思达)'s open notes, while my work focuses on curation and Skills adaptation.
 Prof. Peng's original repository: https://github.com/pengsida/learning_research
@@ -131,15 +162,14 @@ Modifications by Afwan Gibran Muhammad Algiffari (2026).
 | `.claude/settings.json` | Claude Code hooks: context injection on session start, transcript capture before compaction |
 | `tools/ai-context.ps1` | context-memory engine: `log`, `status`, `compact`, `reset`, `resume`, `capture` |
 | `.ai-context/` | shared memory store: `RESEARCH.md` (persistent research context), `CONTEXT.md`, `STATE.json`, `config.json`, `log/`, `archive/` |
+| `README_id.md`, `README_ja.md`, `README_ar.md` | localized READMEs for non-technical researchers |
 
 ### Modified
 
 | Path | Change |
 | --- | --- |
-| `README.md` | added "Project memory (.ai-context)" section and updated the credits paragraph |
-
-All other upstream files (`SKILL.md`, `references/**`, `agents/openai.yaml`, `README_zh.md`,
-top-level `.gitignore`) are unchanged.
+| `README.md` | non-technical quick-start, multi-language links, cross-session memory section |
+| `README_zh.md` | updated with multi-language links and non-technical quick-start |
 
 ### Removed
 
