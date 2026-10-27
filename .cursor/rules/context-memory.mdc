@@ -1,0 +1,22 @@
+---
+description: Shared context memory for every AI agent (read .ai-context before editing)
+alwaysApply: true
+---
+
+# Context memory
+
+Follow `AGENTS.md`. Before editing:
+
+1. Read `.ai-context/RESEARCH.md` (persistent research context) and `.ai-context/CONTEXT.md`.
+2. Read `.ai-context/STATE.json` and the newest file in `.ai-context/log/`.
+3. If `.ai-context/COMPACTION_TASK.md` exists, complete it first.
+
+After each work unit:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File tools/ai-context.ps1 log `
+  -Agent cursor -Did "<what changed>" -Files "<paths>" -Next "<next step>"
+```
+
+Budget: `... ai-context.ps1 status`; at ~100,000 tokens run `... ai-context.ps1 compact`.
+Clean slate: `... ai-context.ps1 reset -Yes` keeps `.ai-context/RESEARCH.md` and archives the rest.

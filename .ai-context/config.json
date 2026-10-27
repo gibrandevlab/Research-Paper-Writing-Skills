@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "compact_threshold_tokens": 100000,
+  "keep_recent_tokens": 20000,
+  "chars_per_token": 4,
+  "max_context_md_tokens": 3000,
+  "auto_capture_transcript_messages": 40,
+  "max_entry_chars": 600,
+  "agents": [
+    "cline",
+    "claude-code",
+    "codex",
+    "gemini",
+    "cursor",
+    "copilot",
+    "other"
+  ],
+  "notes": [
+    "compact_threshold_tokens: total token estimate of .ai-context (CONTEXT.md + STATE.json + log/*.md) that triggers compaction.",
+    "keep_recent_tokens: newest logs kept verbatim after compaction; older logs are archived.",
+    "chars_per_token: rough estimator used because no tokenizer is guaranteed to be installed.",
+    "max_context_md_tokens: budget for the rewritten CONTEXT.md.",
+    "max_entry_chars: hard cap per bullet in a log entry."
+  ]
+}

@@ -1,0 +1,16 @@
+# macOS / Windows metadata
+.DS_Store
+Thumbs.db
+
+# Editor temporary files
+*.swp
+*.swo
+*~
+*.tmp
+
+# ai-context runtime (operational memory — not useful for other users)
+.ai-context/STATE.json
+.ai-context/COMPACTION_TASK.md
+.ai-context/log/*.md
+.ai-context/archive/*
+!.ai-context/archive/.gitkeep
