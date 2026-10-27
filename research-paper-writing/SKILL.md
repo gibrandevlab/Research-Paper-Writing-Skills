@@ -18,6 +18,40 @@ Prioritize first-impression quality (figures/tables/layout), logical flow, and e
 5. Check every major claim in Abstract/Introduction against experimental evidence.
 6. Run final-paper adversarial review with `references/paper-review.md`.
 
+## On-Demand Reference Loading (Hard Rule)
+
+Do not read the whole `references/` folder — that costs 20,000–50,000 tokens per message and is a
+rule violation.
+
+**Read at session start (cheap, always allowed):**
+
+1. this `SKILL.md`,
+2. `references/examples/index.md` (example bank map).
+
+**Open everything else only when the user's current request touches that topic:**
+
+| User asks about | Open only this |
+| --- | --- |
+| Abstract | `references/abstract.md`, then `references/examples/abstract-examples.md`, then **one** `references/examples/abstract/template-*.md` |
+| Introduction | `references/introduction.md`, then `references/examples/introduction-examples.md`, then **one** matching `references/examples/introduction/*.md` |
+| Related Work | `references/related-work.md` |
+| Method | `references/method.md`, then `references/examples/method-examples.md`, then only the relevant `references/examples/method/*.md` |
+| Experiments | `references/experiments.md` |
+| Conclusion | `references/conclusion.md` |
+| Whole-paper review | `references/paper-review.md` |
+| "Does my writing flow?" | `references/does-my-writing-flow-source.md` |
+
+Rules:
+
+1. One section guide per turn; a second only if the request genuinely spans two sections.
+2. Examples: index first, then a single matching template/example — never the whole folder.
+3. Prefer a line-range read over dumping a whole file when only one part is needed.
+4. Generic questions (tone, flow principle, review dimensions) may be answered from this `SKILL.md`
+   alone, with no reference file opened.
+5. Never list, grep, or dump the entire `references/` tree; search it, then open only the hits.
+6. When a topic **is** the request, still read its full section guide before answering — token
+   savings never justify skipping the needed source.
+
 ## Global Principles
 
 1. Keep one paragraph for one message only.
@@ -53,7 +87,7 @@ Source reference for this check:
 
 ## Section Guides
 
-Load only the needed section file:
+Load only the needed section file — see On-Demand Reference Loading above. Never open the folder.
 
 - Introduction: `references/introduction.md`
 - Abstract: `references/abstract.md`
@@ -87,7 +121,7 @@ Use `references/paper-review.md` for the full checklist and workflow.
 4. Keep terminology stable across the full paper.
 5. If a claim cannot be supported by results, weaken or remove the claim.
 6. Before finalizing, append and answer a five-dimension self-review question list, then revise the paper based on unresolved items.
-7. Do not load all section references (Introduction/Abstract/Related Work/Method/Experiments/Conclusion) at once; load only the specific section guide needed for the current edit target.
+7. Do not load all section references (Introduction/Abstract/Related Work/Method/Experiments/Conclusion) at once; load only the specific section guide needed for the current edit target, plus at most one matching example file chosen through `references/examples/index.md`.
 
 ## Output Contract
 

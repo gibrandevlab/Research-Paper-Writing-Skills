@@ -91,6 +91,41 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools/ai-context.ps1 log `
 - Do not dump the whole `log/` folder or `archive/` into your context.
 - Prefer `status` over guessing the current budget.
 
+### 3.1 On-Demand Reference Loading (hard rule — index-first, open later)
+
+Never bulk-read the skill's reference folder. Reading every file under
+`research-paper-writing/references/` costs 20,000–50,000 tokens per message and is **forbidden**.
+
+**Always allowed (cheap, read every session):**
+
+1. `research-paper-writing/SKILL.md` — workflow, global principles, section map.
+2. `research-paper-writing/references/examples/index.md` — map of the example bank.
+
+**Everything else is opened only when the user's current request touches that topic:**
+
+| User asks about | Open only this |
+| --- | --- |
+| Abstract | `references/abstract.md` (+ `references/examples/abstract-examples.md`, then **one** `references/examples/abstract/template-*.md`) |
+| Introduction | `references/introduction.md` (+ `references/examples/introduction-examples.md`, then **one** matching `references/examples/introduction/*.md`) |
+| Related Work | `references/related-work.md` |
+| Method | `references/method.md` (+ `references/examples/method-examples.md`, then only the relevant `references/examples/method/*.md`) |
+| Experiments | `references/experiments.md` |
+| Conclusion | `references/conclusion.md` |
+| Whole-paper review | `references/paper-review.md` |
+| "Does my writing flow?" | `references/does-my-writing-flow-source.md` |
+
+Rules:
+
+1. One section guide per turn. Open a second only when the request genuinely spans two sections.
+2. Inside an examples folder: read the index first, then open a single matching template/example —
+   never the whole folder.
+3. Prefer a line-range read over dumping a whole file when only one part is needed.
+4. Answering a generic question (tone, flow principle, review dimensions) from `SKILL.md` alone is
+   correct; do not open any reference file for it.
+5. Never list, grep, or dump the whole `references/` tree into context — search it, then open the hits.
+6. Accuracy is not traded away: when a topic **is** the request, read its full section guide before
+   answering or rewriting.
+
 ## 4. Compaction protocol (threshold: 100,000 tokens)
 
 `status` estimates tokens as `characters / 4` and compares the total of
@@ -162,6 +197,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools/ai-context.ps1 <comman
 3. One task in `STATE.json -> active_goal`; finish or park it before starting another.
 4. If a decision contradicts an entry in `CONTEXT.md`, log the new decision and flag the conflict.
 5. Keep this file and `.ai-context/config.json` in sync when you change thresholds.
+6. Follow **On-Demand Reference Loading** (section 3.1): never bulk-load
+   `research-paper-writing/references/`. Read `SKILL.md` + `references/examples/index.md`, then open
+   only the one section guide the current request needs. A bulk read is a rule violation, not a
+   shortcut.
 
 ## 9. Portability
 
