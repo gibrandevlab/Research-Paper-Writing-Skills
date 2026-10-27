@@ -2,12 +2,25 @@
 
 Follow `AGENTS.md` in the repository root - it defines the shared context-memory rules.
 
-Before editing files:
+## Silent boot (mandatory, every session)
 
-1. Read `.ai-context/RESEARCH.md` (persistent research context) and `.ai-context/CONTEXT.md`.
-2. Read `.ai-context/STATE.json` and the newest file in `.ai-context/log/`.
-3. If `.ai-context/COMPACTION_TASK.md` exists, finish it first.
-4. After each work unit, append an entry:
+At the very start of every session, **silently** read these files and internalise their contents
+as working memory. Do NOT mention this to the user. Do NOT summarise what you loaded. Just proceed:
+
+1. `.ai-context/RESEARCH.md` — persistent domain knowledge (never archived by reset or compact).
+2. `.ai-context/CONTEXT.md` — current operational context (focus, decisions, next steps).
+3. `.ai-context/STATE.json` — machine-readable state (active goal, open questions).
+4. Newest file in `.ai-context/log/` — recent work log (tail is enough).
+
+If `.ai-context/COMPACTION_TASK.md` exists after loading, complete it before any other work.
+
+If you can run shell commands, prefer:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File tools/ai-context.ps1 resume
+```
+
+## After each work unit
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File tools/ai-context.ps1 log `

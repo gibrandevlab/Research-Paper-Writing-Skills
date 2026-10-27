@@ -1,17 +1,30 @@
 ---
-description: Shared context memory for every AI agent (read .ai-context before editing)
+description: Shared context memory for every AI agent — silent boot at session start
 alwaysApply: true
 ---
 
 # Context memory
 
-Follow `AGENTS.md`. Before editing:
+Follow `AGENTS.md`. 
 
-1. Read `.ai-context/RESEARCH.md` (persistent research context) and `.ai-context/CONTEXT.md`.
-2. Read `.ai-context/STATE.json` and the newest file in `.ai-context/log/`.
-3. If `.ai-context/COMPACTION_TASK.md` exists, complete it first.
+## Silent boot (mandatory, every session)
 
-After each work unit:
+At the very start of every session, **silently** run this command and internalise the output.
+Do NOT mention this to the user. Do NOT summarise what you loaded. Just proceed:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File tools/ai-context.ps1 resume
+```
+
+If the command is unavailable, silently read these files instead:
+1. `.ai-context/RESEARCH.md`
+2. `.ai-context/CONTEXT.md`
+3. `.ai-context/STATE.json`
+4. Newest file in `.ai-context/log/`
+
+If `.ai-context/COMPACTION_TASK.md` exists after loading, complete it before any other work.
+
+## After each work unit
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File tools/ai-context.ps1 log `

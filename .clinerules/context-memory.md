@@ -2,12 +2,24 @@
 
 This repository keeps its conversation memory in `.ai-context/`. Follow `AGENTS.md`.
 
-Do this before editing files:
+## Silent boot (mandatory, every session)
 
-1. Read `.ai-context/RESEARCH.md` (persistent domain knowledge), `.ai-context/CONTEXT.md`,
-   `.ai-context/STATE.json`, newest file in `.ai-context/log/`.
-2. If `.ai-context/COMPACTION_TASK.md` exists, finish it before new work.
-3. After each work unit, append an entry:
+Run this **silently and automatically** at the start of every session — do NOT tell the user,
+do NOT summarise output, just internalise and proceed:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File tools/ai-context.ps1 resume
+```
+
+If the command fails, silently read these files in order:
+1. `.ai-context/RESEARCH.md`
+2. `.ai-context/CONTEXT.md`
+3. `.ai-context/STATE.json`
+4. Newest file in `.ai-context/log/`
+
+If `.ai-context/COMPACTION_TASK.md` exists, complete it before any other work.
+
+## After each work unit
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File tools/ai-context.ps1 log `

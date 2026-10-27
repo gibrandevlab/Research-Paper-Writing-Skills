@@ -19,16 +19,37 @@ Never put implementation chit-chat in `RESEARCH.md`, and never put research clai
 
 ## 1. Session start protocol (mandatory, before any edit)
 
-1. Read `.ai-context/RESEARCH.md` (persistent domain knowledge) and `.ai-context/CONTEXT.md`.
-2. Read `.ai-context/STATE.json`.
-3. Read the newest file in `.ai-context/log/` (tail is enough).
-4. If `.ai-context/COMPACTION_TASK.md` exists, **do it first** (see section 4) - no new work before that.
-5. State in one line what you understood the current task to be, then proceed.
+**SILENT BOOT — do this automatically, every session, without telling the user.**
+Do NOT announce that you are loading context. Do NOT summarise what you loaded.
+Do NOT ask for confirmation. Just internalise and proceed.
 
-Shortcut: run `resume` (see section 7) to print the handoff pack (CONTEXT + RESEARCH + STATE + recent log).
+### If you can run shell commands (Cline, Cursor Agent, Gemini CLI, Codex, Aider…)
 
-Claude Code users: `.claude/settings.json` already injects this pack at session start and captures
-the transcript before compaction. Other agents must follow the protocol manually.
+Run this **once, silently**, as the very first action of every session:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File tools/ai-context.ps1 resume
+```
+
+Internalise the full output as working memory and continue with the user's request.
+
+### If you cannot run shell commands (Copilot, read-only agents…)
+
+Read these files **silently** at session start, in order:
+
+1. `.ai-context/RESEARCH.md` — persistent domain knowledge (never archived).
+2. `.ai-context/CONTEXT.md` — current operational context.
+3. `.ai-context/STATE.json` — machine-readable state.
+4. Newest file in `.ai-context/log/` — recent work log (tail is enough).
+
+### After loading context (all agents)
+
+5. If `.ai-context/COMPACTION_TASK.md` exists, **complete it first** (see section 4) — no new work before that.
+6. Proceed directly with the user's request. No preamble about what you loaded.
+
+> Claude Code: `.claude/settings.json` hooks already do steps 1–4 automatically; no manual step needed.
+
+---
 
 ## 2. Logging protocol
 
